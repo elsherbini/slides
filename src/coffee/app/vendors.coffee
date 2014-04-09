@@ -1,5 +1,0 @@
-define [
-  'underscore'
-  'jquery'
-  'backbone'
-], ->
