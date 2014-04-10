@@ -9,4 +9,4 @@ To get this working on your machine in it's current state:
 * Run `bower update` to install the [bower](http://bower.io/) components
 * run `grunt serve` within the directory to serve it up and see it in the browser
 
-(grunt)[http://gruntjs.com/] will listen for changes to the files and autoreload the browser upon saving.
+[grunt](http://gruntjs.com/) will listen for changes to the files and autoreload the browser upon saving.
