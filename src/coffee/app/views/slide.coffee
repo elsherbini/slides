@@ -1,7 +1,8 @@
-define ['backbone', '../models/slide'], (Backbone, SlideModel) ->
+define ['backbone', 'app/models/slide'], (Backbone, SlideModel) ->
 	class SlideView extends Backbone.View
 
 		className: 'slide'
 
 		render: ->
-			this.$el.append(this.model.get 'content')
+			@$el.append( @model.get 'content')
+			return @	

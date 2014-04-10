@@ -23,9 +23,5 @@ requirejs.config
 
 require ['app/vendors'], ->
 
-  require ['app/models/slide','app/views/slide'], (SlideModel, SlideView) ->
-
-    slide = new SlideModel content: '<h1> My First Slide </h1>'
-    slideView = new SlideView model: slide
-    slideView.render()
-    console.log(slideView.el)
+  require ['app/app'], (App) ->
+    App.initialize()
