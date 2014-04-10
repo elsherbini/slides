@@ -8,6 +8,7 @@ define [
     routes:
       '*actions': 'defaultAction'
 
+
     initialize: ->
       appView.render()
       Backbone.history.start()

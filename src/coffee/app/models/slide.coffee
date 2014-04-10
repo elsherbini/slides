@@ -1,6 +1,5 @@
 define ['backbone'], (Backbone) ->
-	slide = Backbone.Model.extend 
+	class Slide extends Backbone.Model 
 		defaults: 
 			type: null
 			content: ''
-	return slide
