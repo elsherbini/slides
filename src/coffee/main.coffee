@@ -8,6 +8,9 @@ requirejs.config
     'backbone':
       deps: ['underscore', 'jquery']
       exports: 'Backbone'
+    'stack':
+      deps: ['d3']
+      exports: 'stack'
 
   paths:
     'underscore': '../components/underscore/underscore'
@@ -15,13 +18,10 @@ requirejs.config
     'jquery': '../components/jquery/jquery'
     'templates': '../templates'
     'text': '../components/requirejs-text/text'
+    'd3': '../components/d3/d3'
+    'stack':'../components/stack/stack'
 
-###require ['app/models/slide'] , (SlideModel) ->
-  console.log new SlideModel 
-    content: "My First Slide"
-    type: "lazy"###
-
-require ['app/vendors'], ->
-
+require ['d3', 'app/vendors'], (d3)->
+  window.d3 = d3
   require ['app/app'], (App) ->
     App.initialize()
