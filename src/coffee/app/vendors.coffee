@@ -3,4 +3,5 @@ define [
   'jquery'
   'backbone'
   'text'
+  'stack'
 ], ->
