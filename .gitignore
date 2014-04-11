@@ -3,4 +3,5 @@ dist
 .tmp
 .sass-cache
 app/components
+!app/components/stack/stack.js
 coffeelint.json
