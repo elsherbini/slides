@@ -60,6 +60,7 @@ module.exports = (grunt)->
   grunt.loadNpmTasks('grunt-contrib-watch')
   grunt.loadNpmTasks('grunt-open')
   grunt.loadNpmTasks('grunt-usemin')
+  grunt.loadNpmTasks('grunt-markdown')
 
   # configurable paths
   yeomanConfig = {
@@ -243,6 +244,19 @@ module.exports = (grunt)->
           dest: '<%= yeoman.dist %>/js'
         }]
 
+    markdown:
+      server:
+        files: [{
+            expand: true,
+            src: 'slides/*.md',
+            dest: '<%= yeoman.app %>/',
+            ext: '.html'
+        }]
+        options:
+          highlight: -> null
+
+
+
     requirejs:
       compile:
         options:
@@ -279,6 +293,7 @@ module.exports = (grunt)->
     'coffee:dist'
     'compass:server'
     'less:server'
+    'markdown:server'
     'connect:server'
     'open:server'
     'watch'
