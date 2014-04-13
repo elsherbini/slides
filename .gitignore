@@ -5,3 +5,5 @@ dist
 app/components
 !app/components/stack/stack.js
 coffeelint.json
+app/slides
+slides
