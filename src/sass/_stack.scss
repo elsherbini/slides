@@ -19,9 +19,9 @@ a:not(:hover) {
   -ms-box-sizing: border-box;
   -o-box-sizing: border-box;
   display: none;
-  height: 800px;
-  padding: 160px 80px;
-  width: 1280px;
+  min-height: 800px;
+  padding: 30px 15px;
+  width: 100%;
   -webkit-transform: translate3d(0,0,0);
 }
 
