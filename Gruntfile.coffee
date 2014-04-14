@@ -259,13 +259,13 @@ module.exports = (grunt)->
       slides:
         options:
           process: (src, filepath) ->
-            return JSON.stringify {id: "#{filepath}", content: "#{src}"}
-          banner: "["
+            return JSON.stringify {id: filepath.match(/([^\\/]+)\.([^\\/]+)$/)[1], content: "#{src}"}
+          banner: "define( function(){ mySlides = ["
           separator: ","
-          footer:"]"
+          footer:"]; return mySlides;})"
         files: [{
           src: '<%= yeoman.app %>/slides/*.html'
-          dest: '<%= yeoman.app %>/compiledSlides.js'
+          dest: '<%= yeoman.tmp %>/js/app/compiledSlides.js'
           }]
 
     requirejs:
