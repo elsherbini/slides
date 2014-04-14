@@ -1,119 +1,115 @@
 function stack() {
   var stack = {},
-      size = [1280, 720],
-      fontSize = 32,
-      height,
-      dispatch = d3.dispatch("scroll", "activate", "deactivate"),
-      i = NaN,
-      y = 0,
-      yt,
-      scrollRatio = 1 / 4;
+      event = d3.dispatch("activate", "deactivate"),
+      section = d3.selectAll("section"),
+      self = d3.select(window),
+      body = document.body,
+      root = document.documentElement,
+      timeout,
+      duration = 250,
+      ease = "cubic-in-out",
+      screenY,
+      size,
+      yActual,
+      yFloor,
+      yTarget,
+      yActive = -1,
+      yMax,
+      yOffset,
+      n = section[0].length;
 
-  var background = d3.select("body").insert("div")
-  var background = d3.select("div").insert("section")
-      .style("box-shadow", "0 8px 16px rgba(0,0,0,.3)");
+  // Invert the z-index so the earliest slides are on top.
+  section.classed("stack", true).style("z-index", function(d, i) { return n - i; });
 
-  var section = d3.selectAll("section")
-      .style("display", "none")
-      .style("box-sizing", "border-box")
-      .style("line-height", "1.35em");
+  // Detect the slide height (by showing an active slide).
+  section.classed("active", true);
+  size = section.node().getBoundingClientRect().height;
+  section.classed("active", false);
 
-  var sectionAndBackground = d3.selectAll(section[0].concat(background.node()))
-      .style("position", "fixed")
-      .style("left", 0)
-      .style("top", 0)
-      .style("width", "100%");
+  // Sets the stack position.
+  stack.position = function(y1) {
+    var y0 = body.scrollTop / size;
+    if (arguments.length < 1) return y0;
 
-  var indicator = d3.select("body").append("div")
-      .attr("class", "indicator")
-    .selectAll("div")
-      .data(d3.range(section.size()))
-    .enter().append("div")
-      .style("position", "absolute")
-      .style("left", 0)
-      .style("width", "3px")
-      .style("background", "linear-gradient(to top,transparent,white)");
+    // clamp and round
+    if (y1 >= n) y1 = n - 1;
+    else if (y1 < 0) y1 = Math.max(0, n + y1);
+    y1 = Math.floor(y1);
 
-  var sectionCurrent = d3.select(section[0][0]).style("display", "block"),
-      sectionNext = d3.select(section[0][1]).style("display", "block");
+    if (y0 - y1) {
+      self.on("scroll.stack", null);
+      leap(y1);
+      d3.select(body).transition()
+          .duration(duration)
+          .ease(ease)
+          .tween("scrollTop", tween(yTarget = y1))
+          .each("end", function() { yTarget = null; self.on("scroll.stack", scroll); });
+    }
 
-  var n = section.size();
+    location.replace("#" + y1);
 
-  var body = d3.select("body")
-      .style("margin", 0)
-      .style("padding", 0)
-      .style("background", "#333");
+    return stack;
+  };
 
-  d3.select(window)
-      .on("resize.stack", resize)
-      .on("scroll.stack", reposition)
+  // Don't do anything fancy for iOS.
+  if (section.style("display") == "block") return;
+
+  self
       .on("keydown.stack", keydown)
-      .each(resize);
+      .on("resize.stack", resize)
+      .on("scroll.stack", scroll)
+      .on("mousemove.stack", snap)
+      .on("hashchange.stack", hashchange);
 
-  d3.timer(function() {
-    reposition();
-    return true;
-  });
+  resize();
+  hashchange();
+  scroll();
 
-  function resize() {
-    if (height) var y0 = y;
-
-    height = size[1] / size[0] * innerWidth;
-
-    sectionAndBackground
-        .style("top", (innerHeight - height) / 2 + "px")
-        .style("height", height + "px");
-
-    indicator
-        .style("margin-top", (innerHeight - height) / 2 + "px")
-        .style("top", function(i) { return (i + (1 - scrollRatio) / 2) * height + "px"; })
-        .style("height", height * scrollRatio + "px");
-
-    body
-        .style("font-size", innerWidth / size[0] * fontSize + "px")
-        .style("height", height * n + (innerHeight - height) + "px");
-
-    // Preserve the current scroll position on resize.
-    if (isNaN(y0)) scrollTo(0, (y = y0) * height);
+  // if scrolling up, jump to edge of previous slide
+  function leap(yNew) {
+    if ((yActual < n - 1) && (yActual == yFloor) && (yNew < yActual)) {
+      yActual -= .5 - yOffset / size / 2;
+      scrollTo(0, yActual * size);
+      reactivate();
+      return true;
+    }
   }
 
-  function reposition() {
-    var y1 = pageYOffset / height,
-        i1 = Math.max(0, Math.min(n - 1, Math.floor(y1)));
-
-    if (i !== i1) {
-      if (i1 === i + 1) { // advance one
-        sectionCurrent.style("display", "none");
-        sectionCurrent = sectionNext;
-        sectionNext = d3.select(section[0][i1 + 1]);
-        dispatch.deactivate.call(stack, i);
-        dispatch.activate.call(stack, i1 + 1);
-      } else if (i1 === i - 1) { // rewind one
-        sectionNext.style("display", "none");
-        sectionNext = sectionCurrent;
-        sectionCurrent = d3.select(section[0][i1]);
-        dispatch.deactivate.call(stack, i + 1);
-        dispatch.activate.call(stack, i1);
-      } else { // skip
-        sectionCurrent.style("display", "none");
-        sectionNext.style("display", "none");
-        sectionCurrent = d3.select(section[0][i1]);
-        sectionNext = d3.select(section[0][i1 + 1]);
-        if (!isNaN(i)) dispatch.deactivate.call(stack, i + 1), dispatch.deactivate.call(stack, i);
-        dispatch.activate.call(stack, i1), dispatch.activate.call(stack, i1 + 1);
+  function reactivate() {
+    var yNewActive = Math.floor(yActual) + (yActual % 1 ? .5 : 0);
+    if (yNewActive !== yActive) {
+      var yNewActives = {};
+      yNewActives[Math.floor(yNewActive)] = 1;
+      yNewActives[Math.ceil(yNewActive)] = 1;
+      if (yActive >= 0) {
+        var yOldActives = {};
+        yOldActives[Math.floor(yActive)] = 1;
+        yOldActives[Math.ceil(yActive)] = 1;
+        for (var i in yOldActives) {
+          if (i in yNewActives) delete yNewActives[i];
+          else event.deactivate.call(section[0][+i], +i);
+        }
       }
-      sectionCurrent.style("display", "block").style("opacity", 1);
-      sectionNext.style("display", "block");
-      i = i1;
+      for (var i in yNewActives) {
+        event.activate.call(section[0][+i], +i);
+      }
+      yActive = yNewActive;
     }
+  }
 
-    if (y1 - i1 > (1 - scrollRatio) / 2) {
-      sectionNext.style("display", "block").style("opacity", Math.min(1, (y1 - i1 - (1 - scrollRatio) / 2) / scrollRatio));
-    } else {
-      sectionNext.style("display", "none");
-    }
+  function resize() {
+    yOffset = (window.innerHeight - size) / 2;
+    yMax = 1 + yOffset / size;
 
-    dispatch.scroll.call(stack, y = y1);
+    d3.select(body)
+        .style("margin-top", yOffset + "px")
+        .style("margin-bottom", yOffset + "px")
+        .style("height", (n - .5) * size + yOffset + "px");
+  }
+
+  function hashchange() {
+    var hash = +location.hash.slice(1);
+    if (!isNaN(hash) && hash !== yFloor) stack.position(hash);
   }
 
   function keydown() {
@@ -134,39 +130,90 @@ function stack() {
       break;
       default: return;
     }
-
-    var y0 = isNaN(yt) ? y : yt;
-
-    yt = Math.max(0, Math.min(n - 1, (delta > 0
-        ? Math.floor(y0 + (1 - scrollRatio) / 2)
-        : Math.ceil(y0 - (1 - scrollRatio) / 2)) + delta));
-
-    d3.select(document.documentElement)
-        .interrupt()
-      .transition()
-        .duration(500)
-        .tween("scroll", function() {
-          var i = d3.interpolateNumber(pageYOffset, yt * height);
-          return function(t) { scrollTo(0, i(t)); };
-        })
-        .each("end", function() { yt = NaN; });
-
+    if (timeout) timeout = clearTimeout(timeout);
+    if (yTarget == null) yTarget = (delta > 0 ? Math.floor : Math.ceil)(yActual == yFloor ? yFloor : yActual + (.5 - yOffset / size / 2));
+    stack.position(yTarget = Math.max(0, Math.min(n - 1, yTarget + delta)));
     d3.event.preventDefault();
   }
 
-  stack.size = function(_) {
-    return arguments.length ? (size = [+_[0], +_[1]], resize(), stack) : size;
+  function scroll() {
+    // Detect whether to scroll with documentElement or body.
+    if (body !== root && root.scrollTop) body = root;
+
+    var yNew = Math.max(0, body.scrollTop / size);
+    if (yNew >= n - 1.51 + yOffset / size) yNew = n - 1;
+
+    // if scrolling up, jump to edge of previous slide
+    if (leap(yNew)) return;
+
+    var yNewFloor = Math.max(0, Math.floor(yActual = yNew)),
+        yError = Math.min(yMax, (yActual % 1) * 2);
+
+    if (yFloor != yNewFloor) {
+      location.replace("#" + yNewFloor);
+      yFloor = yNewFloor;
+    }
+
+    section
+        .classed("active", false);
+
+    d3.select(section[0][yFloor])
+        .style("-webkit-transform", yError ? "translate3d(0," + (-yError * size) + "px,0)" : null)
+        .style("-o-transform", yError ? "translate(0," + (-yError * size) + "px)" : null)
+        .style("-moz-transform", yError ? "translate(0," + (-yError * size) + "px)" : null)
+        .style("transform", yError ? "translate(0," + (-yError * size) + "px)" : null)
+        .classed("active", yError != yMax);
+
+    d3.select(section[0][yFloor + 1])
+        .style("-webkit-transform", yError ? "translate3d(0,0,0)" : null)
+        .style("-o-transform", yError ? "translate(0,0)" : null)
+        .style("-moz-transform", yError ? "translate(0,0)" : null)
+        .style("transform", yError ? "translate(0,0)" : null)
+        .classed("active", yError > 0);
+
+    reactivate();
+  }
+
+  function snap() {
+    var y = d3.event.clientY;
+    if (y === screenY) return; // ignore move on scroll
+    screenY = y;
+
+    if (yTarget != null) return; // don't snap if already snapping
+
+    var y0 = stack.position(),
+        y1 = Math.max(0, Math.round(y0 + .25));
+
+    // if we're before the first slide, or after the last slide, do nothing
+    if (y0 <= 0 || y0 >= n - 1.51 + yOffset / size) return;
+
+    // if the previous slide is not visible, immediate jump
+    if (y1 > y0 && y1 - y0 < .5 - yOffset / size) scrollTo(0, y1 * size);
+
+    // else transition
+    else if (y1 !== y0) stack.position(y1);
+  }
+
+  function tween(y) {
+    return function() {
+      var i = d3.interpolateNumber(this.scrollTop, y * size);
+      return function(t) { scrollTo(0, i(t)); scroll(); };
+    };
+  }
+
+  stack.duration = function(_) {
+    if (!arguments.length) return duration;
+    duration = _;
+    return stack;
   };
 
-  stack.scrollRatio = function(_) {
-    return arguments.length ? (scrollRatio = +_, resize(), stack) : scrollRatio;
+  stack.ease = function(_) {
+    if (!arguments.length) return ease;
+    ease = _;
+    return stack;
   };
 
-  stack.fontSize = function(_) {
-    return arguments.length ? (fontSize = +_, resize(), stack) : fontSize;
-  };
-
-  d3.rebind(stack, dispatch, "on");
+  d3.rebind(stack, event, "on");
 
   return stack;
 }

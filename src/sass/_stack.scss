@@ -1,6 +1,4 @@
 body {
-  background: #929292;
-  font-family: "Helvetica Neue";
   margin: auto;
   width: 1280px;
 }
@@ -14,15 +12,13 @@ a:not(:hover) {
 }
 
 .stack {
-  background: #222;
-  color: #fff;
+  background: #fff;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   -ms-box-sizing: border-box;
   -o-box-sizing: border-box;
   display: none;
-  font-size: 48px;
   height: 800px;
   padding: 160px 80px;
   width: 1280px;
@@ -52,11 +48,4 @@ screen and (max-device-width: 1024px) {
   .stack {
     display: block;
   }
-}
-
-section {
-  background: #000;
-  color: #fff;
-  padding: 2em;
-  font-family: "PT Serif", Baskerville, Georgia;
 }
