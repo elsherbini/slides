@@ -1,6 +1,5 @@
 define ['backbone','app/views/slides','app/collections/slides','app/compiledSlides' ], (Backbone, SlidesView, SlidesCollection, mySlides) ->
 
-
   class AppView extends Backbone.View
 
     el: "body"
@@ -13,6 +12,6 @@ define ['backbone','app/views/slides','app/collections/slides','app/compiledSlid
       @hackery()
 
     hackery: ->
-      @$el.append('<script>stack()</script>')
+      @$el.append('<script>stack();prettify.prettyPrint();</script>')
 
   appView = new AppView()

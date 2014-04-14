@@ -8,6 +8,7 @@
     "bootstrap": "~2.3.2",
     "requirejs-text": "~2.0.5",
     "d3": "*",
-    "underscore": "~1.4.4"
+    "underscore": "~1.4.4",
+    "google-code-prettify": "*"
   }
 }

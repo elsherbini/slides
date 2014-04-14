@@ -11,6 +11,8 @@ requirejs.config
     'stack':
       deps: ['d3']
       exports: 'stack'
+    'prettyprint':
+      exports: 'prettyprint'
 
   paths:
     'underscore': '../components/underscore/underscore'
@@ -20,8 +22,10 @@ requirejs.config
     'text': '../components/requirejs-text/text'
     'd3': '../components/d3/d3'
     'stack':'../components/stack/stack'
+    'prettify':'../components/google-code-prettify/src/prettify'
 
-require ['d3', 'app/vendors'], (d3)->
+require ['d3', 'prettify', 'app/vendors'], (d3, prettify)->
   window.d3 = d3
+  window.prettify = prettify
   require ['app/app'], (App) ->
     App.initialize()

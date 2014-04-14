@@ -7,4 +7,5 @@ define ['backbone', 'app/models/slide'], (Backbone, SlideModel) ->
 
     render: ->
       @$el.append( @model.get 'content')
+      @$el.find('pre').addClass('prettyprint')
       return @
