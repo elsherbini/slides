@@ -255,6 +255,19 @@ module.exports = (grunt)->
         options:
           template: '<%= yeoman.app %>/templates/slideTemplate.html'
 
+    concat:
+      slides:
+        options:
+          process: (src, filepath) ->
+            return JSON.stringify {id: "#{filepath}", content: "#{src}"}
+          banner: "["
+          separator: ","
+          footer:"]"
+        files: [{
+          src: '<%= yeoman.app %>/slides/*.html'
+          dest: '<%= yeoman.app %>/compiledSlides.js'
+          }]
+
     requirejs:
       compile:
         options:
@@ -292,6 +305,7 @@ module.exports = (grunt)->
     'compass:server'
     'less:server'
     'markdown:server'
+    'concat:slides'
     'connect:server'
     'open:server'
     'watch'

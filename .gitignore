@@ -7,3 +7,4 @@ app/components
 coffeelint.json
 app/slides
 slides
+app/compiledSlides.js
