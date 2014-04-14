@@ -102,6 +102,10 @@ module.exports = (grunt)->
         files: ['<%= yeoman.src %>/sass/{,**/}*.{scss,sass}']
         tasks: ['compass:server']
 
+      slides:
+        files: ['slides/*.md']
+        tasks: ['markdown:server','concat:slides']
+
       files:
         files: [
           '<%= yeoman.tmp %>/{,**/}*.{css,js}'
