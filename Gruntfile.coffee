@@ -253,9 +253,7 @@ module.exports = (grunt)->
             ext: '.html'
         }]
         options:
-          highlight: -> null
-
-
+          template: '<%= yeoman.app %>/templates/slideTemplate.html'
 
     requirejs:
       compile:
