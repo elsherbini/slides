@@ -1,68 +1,93 @@
-/* Pretty printing styles. Used with prettify.js.
- *
- * Name:  Stanley Ng
- * Email:   stanleyhlng@googlegroups.com
- * 
- * Credits:
- * https://github.com/chriskempson/tomorrow-theme
- */
-.pln {
-  color: #c5c8c6; }
+/* Tomorrow Night Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
 
-.str {
-  color: #b5bd68; }
-
-.kwd {
-  color: #b294bb; }
-
-.com {
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-title {
   color: #969896;
-  font-style: italic; }
+}
 
-.typ {
-  color: #de935f; }
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-attribute,
+.hljs-tag,
+.hljs-regexp,
+.ruby .hljs-constant,
+.xml .hljs-tag .hljs-title,
+.xml .hljs-pi,
+.xml .hljs-doctype,
+.html .hljs-doctype,
+.css .hljs-id,
+.css .hljs-class,
+.css .hljs-pseudo {
+  color: #cc6666;
+}
 
-.lit {
-  color: #f0c674; }
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-preprocessor,
+.hljs-pragma,
+.hljs-built_in,
+.hljs-literal,
+.hljs-params,
+.hljs-constant {
+  color: #de935f;
+}
 
-.pun {
-  color: #c5c8c6; }
+/* Tomorrow Yellow */
+.ruby .hljs-class .hljs-title,
+.css .hljs-rules .hljs-attribute {
+  color: #f0c674;
+}
 
-.opn {
-  color: #c5c8c6; }
+/* Tomorrow Green */
+.hljs-string,
+.hljs-value,
+.hljs-inheritance,
+.hljs-header,
+.ruby .hljs-symbol,
+.xml .hljs-cdata {
+  color: #b5bd68;
+}
 
-.clo {
-  color: #c5c8c6; }
+/* Tomorrow Aqua */
+.css .hljs-hexcolor {
+  color: #8abeb7;
+}
 
-.tag {
-  color: #cc6666; }
+/* Tomorrow Blue */
+.hljs-function,
+.python .hljs-decorator,
+.python .hljs-title,
+.ruby .hljs-function .hljs-title,
+.ruby .hljs-title .hljs-keyword,
+.perl .hljs-sub,
+.javascript .hljs-title,
+.coffeescript .hljs-title {
+  color: #81a2be;
+}
 
-.atn {
-  color: #f0c674; }
+/* Tomorrow Purple */
+.hljs-keyword,
+.javascript .hljs-function {
+  color: #b294bb;
+}
 
-.atv {
-  color: #8abeb7; }
+.hljs {
+  display: block;
+  background: #1d1f21;
+  color: #c5c8c6;
+  padding: 0.5em;
+}
 
-.dec {
-  color: #c5c8c6; }
-
-.var {
-  color: #c82829; }
-
-.fun {
-  color: #cc6666; }
-
-/* Put a border around prettyprinted code snippets. */
-pre.prettyprint {
-  background-color: #1d1f21;
-  padding: 10px;
-  border: 1px solid #E1E1E8; }
-
-/* Specify class=linenums on a pre to get line numbering */
-ol.linenums {
-  color: #969896;
-  margin: 0 0 0 40px; }
-
-ol.linenums li {
-  line-height: 18px;
-  padding-left: 12px; }
+.coffeescript .javascript,
+.javascript .xml,
+.tex .hljs-formula,
+.xml .javascript,
+.xml .vbscript,
+.xml .css,
+.xml .hljs-cdata {
+  opacity: 0.5;
+}

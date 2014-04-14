@@ -9,6 +9,6 @@
     "requirejs-text": "~2.0.5",
     "d3": "*",
     "underscore": "~1.4.4",
-    "google-code-prettify": "*"
+    "highlightjs": "~8.0"
   }
 }
