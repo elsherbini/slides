@@ -4,4 +4,5 @@ define [
   'backbone'
   'text'
   'stack'
+  'highlight'
 ], ->
