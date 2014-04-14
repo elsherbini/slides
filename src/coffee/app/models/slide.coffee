@@ -1,5 +1,5 @@
 define ['backbone'], (Backbone) ->
-	class Slide extends Backbone.Model 
-		defaults: 
-			type: null
+	class Slide extends Backbone.Model
+		defaults:
+			id: ''
 			content: ''
