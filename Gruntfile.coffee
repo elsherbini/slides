@@ -103,8 +103,8 @@ module.exports = (grunt)->
         tasks: ['compass:server']
 
       slides:
-        files: ['slides/*.md']
-        tasks: ['markdown:server','concat:slides']
+        files: ['slides/*.md', 'slides/*.html']
+        tasks: ['markdown:server','copy:server','concat:slides']
 
       files:
         files: [
@@ -209,6 +209,14 @@ module.exports = (grunt)->
           src: ['**']
           dest: '<%= yeoman.tmp_dist %>/'
         }]
+      server:
+        files: [{
+          expand: true
+          src: 'slides/*.html'
+          dest: '<%= yeoman.app %>/'
+          ext: '.html'
+          }]
+
 
     useminPrepare:
       html: '<%= yeoman.tmp_dist %>/index.html'
@@ -252,8 +260,8 @@ module.exports = (grunt)->
       server:
         files: [{
             expand: true,
-            src: 'slides/*.md',
-            dest: '<%= yeoman.app %>/',
+            src: 'slides/*.md'
+            dest: '<%= yeoman.app %>/'
             ext: '.html'
         }]
         options:
@@ -309,6 +317,7 @@ module.exports = (grunt)->
     'compass:server'
     'less:server'
     'markdown:server'
+    'copy:server'
     'concat:slides'
     'connect:server'
     'open:server'
