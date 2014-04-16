@@ -301,7 +301,7 @@ module.exports = (grunt)->
           modules: [
             { name: 'app/vendors', exclude: [] }
             { name: 'app/app', exclude: ['app/vendors'] }
-            { name: 'main', exclude: ['config', 'app/app', 'app/vendors'] }
+            { name: 'main', exclude: ['app/app', 'app/vendors'] }
           ]
 
   # Re-build just the changed file (Coffee)
@@ -343,8 +343,10 @@ module.exports = (grunt)->
     'coffee'
     'compass:dist'
     'less:dist'
+    'markdown:server'
+    'copy:server'
+    'concat:slides'
     'copy:dist'
-    'connect:test'
     'requirejs:compile'
     'useminPrepare'
     'imagemin'
