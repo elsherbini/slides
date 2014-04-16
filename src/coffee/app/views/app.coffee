@@ -1,4 +1,4 @@
-define ['backbone','app/views/slides','app/collections/slides','app/compiledSlides' ], (Backbone, SlidesView, SlidesCollection, mySlides) ->
+define ['backbone','app/views/slides','app/collections/slides','app/compiledSlides'], (Backbone, SlidesView, SlidesCollection, mySlides) ->
 
   class AppView extends Backbone.View
 
@@ -11,14 +11,10 @@ define ['backbone','app/views/slides','app/collections/slides','app/compiledSlid
         collection: new SlidesCollection(mySlides)
       @hackery()
 
+
     hackery: ->
-      @$el.append('''
-        <script>
-        $(document).ready(function() {
-          $('pre code').each(function(i, e) {hljs.highlightBlock(e)});
-        });
-        stack();
-        </script>        
-        ''')
+      stack()
+      $(document).ready -> 
+        $('pre code').each( (i, e) -> hljs.highlightBlock e )
 
   appView = new AppView()
