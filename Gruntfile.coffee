@@ -287,7 +287,7 @@ module.exports = (grunt)->
           appDir: './<%= yeoman.tmp_dist %>/'
           dir: './<%= yeoman.dist %>/'
 
-          wrap: true
+          wrap: false
 
           removeCombined: true
           keepBuildDir: true

@@ -1,5 +1,7 @@
 Building my personal slide engine based on the [tutorial at Tuts+](https://tutsplus.com/course/build-your-own-slide-engine/) taught by [Jeffrey Way](http://jeffrey-way.com/).
 
+To see the engine in action, go to [http://elsherbini.github.io/slides/](http://elsherbini.github.io/slides/)
+
 To get this working on your machine in it's current state:
 * Make sure you have node/npm and ruby installed
 * Install [yeoman](http://yeoman.io/) with `npm install -g yo`
