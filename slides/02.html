@@ -1,0 +1,23 @@
+<h2 id="syntax-highlighting-just-works">Syntax highlighting just works</h2>
+<p>Thanks to <a href="http://highlightjs.org/">highlight.js</a>, all code blocks will be highlighted, with a bitchin&#39; <a href="https://github.com/ChrisKempson/Tomorrow-Theme">tomorrow-night theme</a> by default</p>
+<pre><code>function transitionGlobe(dest) {
+  d3.transition()
+      .duration(1250)
+      .each(&quot;start&quot;, function() {
+      })
+      .tween(&quot;rotate&quot;, function() {
+        var p = d3.geo.centroid(countries[lookUp(dest, countries)]),
+            r = d3.interpolate(projection.rotate(), [-p[0], -p[1]]);
+        return function(t) {
+
+          projection.rotate(r(t));
+          c.clearRect(0, 0, width, height);
+          c.fillStyle = &quot;#a7bc2e&quot;, c.beginPath(), path(land), c.fill();
+          c.fillStyle = &quot;#BE86FF&quot;, c.beginPath(), path(francophoneCountries), c.fill();
+          c.fillStyle = &quot;#46056F&quot;, c.beginPath(), path(countries[i]), c.fill();
+          c.strokeStyle = &quot;#5C7F42&quot;, c.lineWidth = .5, c.beginPath(), path(borders), c.stroke();
+          c.strokeStyle = &quot;#464646&quot;, c.lineWidth = 2, c.beginPath(), path(globe), c.stroke();
+        };
+      })
+}</code></pre>
+
